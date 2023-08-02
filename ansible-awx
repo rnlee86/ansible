@@ -1,0 +1,51 @@
+    1  dnf -y update
+    2  dnf -y upgrade
+    3  systemctl disable firewalld --now
+    4  reboot
+    5  setenforce 0
+    6  sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+    7  cat /etc/selinux/config | grep SELINUX=
+    8  curl -sfL https://get.k3s.io | sudo bash -
+    9  sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+   10  systemctl status k3s.service
+   11  kubectl get nodes
+   12  kubectl version --short
+   13  kubectl version 
+   14  yum -y install git make
+   15  git clone https://github.com/ansible/awx-operator.git
+   16  export NAMESPACE=awx
+   17  kubectl create ns ${NAMESPACE}
+   18  kubectl config set-context --current --namespace=$NAMESPACE 
+   19  ll
+   20  cd awx-operator/
+   21  pwd
+   22  ll
+   23  yum -y install jq
+   24  RELEASE_TAG=`curl -s https://api.github.com/repos/ansible/awx-operator/releases/latest | grep tag_name | cut -d '"' -f 4`
+   25  echo $RELEASE_TAG
+   26  git checkout $RELEASE_TAG
+   27  export NAMESPACE=awx
+   28  make deploy
+   29  kubectl get pods -n awx
+   30  nano public-static-pvc.yaml
+   31  kubectl apply -f public-static-pvc.yaml -n awx
+   32  kubectl get pvc -n awx
+   33  touch awx-instance-deployment.yml
+   34  cat awx-instance-deployment.yml
+   35  kubectl apply -f awx-instance-deployment.yml -n awx
+   36  watch kubectl get pods -l "app.kubernetes.io/managed-by=awx-operator" -n awx
+   37  kubectl get pods -n awx
+   38  watch kubectl get pods -l "app.kubernetes.io/managed-by=awx-operator" -n awx
+   39  kubectl get pods -n awx
+   40  kubectl  get pvc
+   41  kubectl logs awx-postgres-0
+   42  kubectl logs awx-postgres-13-0 
+   43  kubectl logs awx-postgres-13-0 | grep mkdir
+   44  kubectl get pods -n awx
+   45  clear
+   46  kubectl get pods -n awx
+   47  kubectl get deploy
+   48  kubectl -n awx  logs deploy/awx -c redis
+   49  kubectl get service -n awx
+   50  kubectl -n awx get secret awx-admin-password -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+   51  dnf install ansible
